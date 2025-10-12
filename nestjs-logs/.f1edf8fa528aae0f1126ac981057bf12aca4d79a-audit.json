@@ -1,0 +1,25 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\Users\\gabri\\Documentos\\github\\nest-rest-api\\nestjs-logs\\.f1edf8fa528aae0f1126ac981057bf12aca4d79a-audit.json",
+    "files": [
+        {
+            "date": 1759944855789,
+            "name": "C:\\Users\\gabri\\Documentos\\github\\nest-rest-api\\nestjs-logs\\app-2025-10-08.log",
+            "hash": "ae2df97cf1c157c404d5ac2467b8c1a03a34e64574726c09140dcb0d8f6db070"
+        },
+        {
+            "date": 1760196837244,
+            "name": "C:\\Users\\gabri\\Documentos\\github\\nest-rest-api\\nestjs-logs\\app-2025-10-11.log",
+            "hash": "6576bd6fca4d6ba8ef77866121636f306f0f938e1bd96912a83300c37c47a8ff"
+        },
+        {
+            "date": 1760243845808,
+            "name": "C:\\Users\\gabri\\Documentos\\github\\nest-rest-api\\nestjs-logs\\app-2025-10-12.log",
+            "hash": "42c67940f0cb45fb5eaf7764588f94e4454748e68163597d72af53de865978d3"
+        }
+    ],
+    "hashType": "sha256"
+}
