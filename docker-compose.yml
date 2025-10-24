@@ -7,7 +7,7 @@ services:
       - "3100:3100"
     command: -config.file=/etc/loki/config/config.yml
     volumes:
-      - ./loki-config.yml:/etc/loki/config/config.yml
+      - .configs/grafana/loki.yml:/etc/loki/config/config.yml
       - loki-data:/tmp/loki
 
   promtail:
@@ -15,7 +15,7 @@ services:
     container_name: promtail
     volumes:
       - /var/log:/var/log
-      - ./promtail-config.yml:/etc/promtail/config.yml
+      - .configs/grafana/promtail.yml:/etc/promtail/config.yml
       - ./nestjs-logs:/nestjs-logs
     command: -config.file=/etc/promtail/config.yml
     depends_on:
@@ -41,7 +41,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - .configs/grafana/prometheus.yml:/etc/prometheus/prometheus.yml
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
 
@@ -62,7 +62,44 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:alpine3.22
+    container_name: nest-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=nestjs
+      - DB_PASSWORD=nestjs123
+      - DB_NAME=nestjs_db
+      - REDIS_HOST=nest-redis
+      - REDIS_PORT=6379
+      - LOG_LEVEL=info
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+
 volumes:
   loki-data:
   postgres-data:
   grafana_data:
+  redis-data:

@@ -7,10 +7,25 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity';
+import { CacheModule } from '@nestjs/cache-manager';
+import { Keyv } from 'keyv';
+import KeyvRedis from '@keyv/redis';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      useFactory: async () => {
+        const keyv = new Keyv({
+          store: new KeyvRedis(process.env.REDIS_URL || 'redis://localhost:6379'),
+        });
+        return {
+          stores: [keyv],
+          ttl: 30000, // 30 seconds default TTL
+        };
+      },
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST || 'localhost',
